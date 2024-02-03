@@ -1,0 +1,5 @@
+pywhatkit==6.4
+qrcode==8.1.1
+Pillow==10.4.0
+firebase-admin==6.1.0
+hashlib==3.6.4
