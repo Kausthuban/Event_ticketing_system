@@ -1,5 +1,5 @@
 # %%
-
+import os
 import pywhatkit as kit
 import time
 import qrcode
@@ -75,8 +75,8 @@ def add_tkt_entry(ID,totalCount,tkt_template=tkt_template):
 
 # %%
 def send_message(ticketID,number,imageID):
-    message = f"Dear customer, thank you for choosing event managers for the holi event on 25th \n Your ticket ID is given below \n {ticketID}"
-    kit.sendwhats_image("+91"+number, f"Codes/{imageID}",message, 10, tab_close=True)
+    message = f"Dear customer,\n\n We extend our sincere gratitude for selecting MSLASH Event Management to coordinate the upcoming Holi event \"HOLI CLOUDS\" scheduled for the 25th Of March.\n\nYour assigned Ticket ID is provided below. Please make sure to show up to the event from 9 am to 4 pm\n \n {ticketID}"
+    kit.sendwhats_image("+91"+number, f"Codes/{imageID}",message,50,True,5)
     time.sleep(4)
 
 # %%
@@ -140,6 +140,29 @@ def get_ids(collection_name='Registrations'):
         document_ids.append(doc.id)
     return document_ids
 
+def check_deleted():
+    present =[]
+    for id in get_ids():
+        file= db.collection('Registrations').document(id)
+        print(file.get().get('imageID'))
+        present.append(file.get().get('imageID'))
+
+
+
+    folder_path = 'Codes/'
+    all_files = os.listdir(folder_path)
+    print(present)
+    for file_name in all_files:
+    
+        if file_name not in present:
+        # Construct the full path to the file
+            file_path = os.path.join(folder_path, file_name)
+            try:
+            # Attmpt to delete the file
+                print(file_name)
+                #os.remove(file_path)
+            except OSError as e:
+                pass
 # %%
 def get_exec():
     idcount_doc = db.collection('Logs_Variables').document('Execute')
@@ -158,10 +181,8 @@ def main():
 
 
 while True:
-    time.sleep(30)
+    check_deleted()    
     main()
-
+    time.sleep(30)
         
-
-
 
